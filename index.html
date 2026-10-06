@@ -1,0 +1,868 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#16070f">
+  <meta name="description" content="A little love note for Mariya.">
+  <title>For Mariya, with love</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --night: #10070d;
+      --wine: #35101f;
+      --rose: #ffb6c8;
+      --pink: #ffc9d6;
+      --gold: #f3d39a;
+      --cream: #fff5f1;
+      --muted: #d4b6be;
+      --serif: Georgia, "Noto Serif Bengali", "Nirmala UI", serif;
+      --sans: "Noto Sans Bengali", "Nirmala UI", system-ui, sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-width: 320px;
+      scroll-behavior: smooth;
+      scroll-padding-top: 28px;
+      background: var(--night);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--cream);
+      background:
+        radial-gradient(ellipse at 50% 4%, rgb(115 30 59 / 34%), transparent 38rem),
+        radial-gradient(ellipse at 0% 62%, rgb(92 19 48 / 17%), transparent 34rem),
+        radial-gradient(ellipse at 100% 82%, rgb(127 45 53 / 13%), transparent 32rem),
+        linear-gradient(160deg, #170911 0%, #0e080d 48%, #180910 100%);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      position: fixed;
+      z-index: -1;
+      inset: -30%;
+      background: conic-gradient(from 210deg at 50% 50%, transparent 0 30%, rgb(192 59 96 / 8%) 38%, transparent 49% 70%, rgb(243 211 154 / 5%) 78%, transparent 90%);
+      content: "";
+      filter: blur(85px);
+      animation: ambient 32s linear infinite;
+      pointer-events: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .sky,
+    .float-layer {
+      position: fixed;
+      z-index: 0;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .sky i {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: #ffe8cb;
+      box-shadow: 0 0 8px 2px rgb(255 222 188 / 42%);
+      opacity: 0.5;
+      animation: twinkle var(--duration, 3s) ease-in-out infinite alternate;
+    }
+
+    .float-heart {
+      position: absolute;
+      bottom: -50px;
+      color: rgb(255 177 198 / 58%);
+      font-size: var(--size, 18px);
+      text-shadow: 0 0 18px rgb(255 90 137 / 65%);
+      animation: drift var(--duration, 12s) linear forwards;
+      will-change: transform, opacity;
+    }
+
+    .experience {
+      position: relative;
+      z-index: 1;
+    }
+
+    .intro-screen {
+      display: grid;
+      min-height: 100vh;
+      min-height: 100svh;
+      place-items: center;
+      padding: max(28px, env(safe-area-inset-top)) 22px max(28px, env(safe-area-inset-bottom));
+      text-align: center;
+      transition: opacity 900ms ease, transform 900ms ease;
+    }
+
+    .intro-screen.is-leaving {
+      opacity: 0;
+      transform: scale(1.035);
+      pointer-events: none;
+    }
+
+    .intro-content {
+      display: grid;
+      justify-items: center;
+      width: min(100%, 720px);
+      gap: 18px;
+    }
+
+    .intro-line {
+      margin: 0;
+      opacity: 0;
+      transform: translateY(13px);
+      transition: opacity 750ms ease, transform 750ms cubic-bezier(.2, .75, .25, 1);
+      font-family: var(--serif);
+      font-size: clamp(1.5rem, 6.5vw, 3.65rem);
+      font-weight: 400;
+      line-height: 1.55;
+      text-shadow: 0 0 26px rgb(255 154 187 / 32%);
+    }
+
+    .intro-line.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .intro-line.primary {
+      color: #ffe6e3;
+      font-size: clamp(2.1rem, 9vw, 5.4rem);
+      animation: heartGlow 2.6s ease-in-out infinite;
+    }
+
+    .intro-line.note {
+      color: var(--pink);
+      font-size: clamp(1.1rem, 4.5vw, 1.8rem);
+    }
+
+    .intro-action {
+      margin-top: 8px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 700ms ease, transform 700ms ease;
+      pointer-events: none;
+    }
+
+    .intro-action.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .glow-button {
+      position: relative;
+      display: inline-flex;
+      min-height: 54px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      overflow: hidden;
+      padding: 13px 26px;
+      border: 1px solid rgb(255 211 219 / 47%);
+      border-radius: 999px;
+      color: #fff8f5;
+      background: linear-gradient(115deg, #8e294c, #c24e70 52%, #864059);
+      box-shadow: 0 0 28px rgb(221 80 121 / 29%), inset 0 1px rgb(255 255 255 / 18%);
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 650;
+      transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .glow-button::after {
+      position: absolute;
+      top: -80%;
+      bottom: -80%;
+      left: -45%;
+      width: 30%;
+      background: linear-gradient(90deg, transparent, rgb(255 255 255 / 32%), transparent);
+      content: "";
+      transform: rotate(18deg);
+      animation: sheen 5s ease-in-out infinite;
+    }
+
+    .glow-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 38px rgb(221 80 121 / 45%), inset 0 1px rgb(255 255 255 / 22%);
+      filter: brightness(1.08);
+    }
+
+    .glow-button:active {
+      transform: scale(.98);
+    }
+
+    .glow-button:focus-visible,
+    .close-button:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+    }
+
+    .story {
+      display: none;
+      width: min(100% - 32px, 820px);
+      margin-inline: auto;
+      padding: 10px 0 max(72px, env(safe-area-inset-bottom));
+      animation: storyIn 1.2s ease both;
+    }
+
+    .story.visible {
+      display: block;
+    }
+
+    .story-section {
+      display: none;
+    }
+
+    .story-section.active {
+      display: grid;
+      min-height: 78vh;
+      min-height: min(78svh, 740px);
+      align-content: center;
+      justify-items: center;
+      gap: clamp(18px, 4vh, 34px);
+      padding: clamp(62px, 12vh, 116px) 10px;
+      text-align: center;
+    }
+
+    .story-section.compact {
+      min-height: 60vh;
+      min-height: 60svh;
+    }
+
+    .story-section.final {
+      min-height: 88vh;
+      min-height: 88svh;
+      padding-bottom: 70px;
+    }
+
+    [data-reveal] {
+      display: none;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    [data-reveal].shown {
+      display: block;
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+      animation: lineReveal 760ms cubic-bezier(.2, .75, .25, 1) both;
+    }
+
+    .revealed-message {
+      opacity: 0;
+      filter: blur(4px);
+      transform: translate3d(0, 18px, 0) scale(.985);
+    }
+
+    .revealed-message.shown {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+      transition:
+        opacity 760ms cubic-bezier(.2, .75, .25, 1),
+        filter 760ms ease,
+        transform 760ms cubic-bezier(.2, .75, .25, 1);
+    }
+
+    .message.big-love.shown {
+      animation:
+        lineReveal 760ms cubic-bezier(.2, .75, .25, 1) both,
+        heartGlow 2.8s ease-in-out 760ms infinite;
+    }
+
+    .glass-card:not(.revealed) {
+      display: none;
+    }
+
+    .next-button {
+      position: fixed;
+      z-index: 3;
+      right: max(20px, env(safe-area-inset-right));
+      bottom: max(22px, env(safe-area-inset-bottom));
+      display: grid;
+      width: 58px;
+      height: 58px;
+      place-items: center;
+      border: 1px solid rgb(255 220 228 / 52%);
+      border-radius: 50%;
+      color: #fff5f1;
+      background: linear-gradient(145deg, #b54467, #76243f);
+      box-shadow: 0 0 28px rgb(221 80 121 / 42%), inset 0 1px rgb(255 255 255 / 22%);
+      cursor: pointer;
+      font-family: system-ui, sans-serif;
+      font-size: 1.8rem;
+      line-height: 1;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .next-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 38px rgb(221 80 121 / 58%), inset 0 1px rgb(255 255 255 / 22%);
+    }
+
+    .next-button:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+    }
+
+    .next-button[hidden] {
+      display: none;
+    }
+
+    #open-letter {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 650ms ease;
+    }
+
+    #open-letter.ready {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .message {
+      max-width: 26ch;
+      margin: 0;
+      color: var(--cream);
+      font-family: var(--serif);
+      font-size: clamp(1.38rem, 4.4vw, 2.35rem);
+      font-weight: 400;
+      line-height: 1.8;
+      text-wrap: pretty;
+    }
+
+    .message.soft {
+      color: var(--muted);
+      font-size: clamp(1.16rem, 3.7vw, 1.8rem);
+    }
+
+    .message.gold {
+      color: var(--gold);
+    }
+
+    .message.english {
+      font-family: var(--serif);
+      font-size: clamp(1.3rem, 4vw, 2rem);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .message.big-love {
+      max-width: 19ch;
+      color: #ffe0e5;
+      font-family: var(--serif);
+      font-size: clamp(2.35rem, 9vw, 5.2rem);
+      letter-spacing: .015em;
+      line-height: 1.2;
+      text-shadow: 0 0 24px rgb(255 103 147 / 37%), 0 0 70px rgb(232 77 125 / 30%);
+      animation: heartGlow 2.8s ease-in-out infinite;
+    }
+
+    .message.reveal-line {
+      max-width: 24ch;
+      color: #ffe0e5;
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 6.5vw, 3.4rem);
+      letter-spacing: .015em;
+      line-height: 1.45;
+      text-shadow: 0 0 24px rgb(255 103 147 / 42%);
+    }
+
+    .kicker {
+      margin: 0;
+      color: var(--gold);
+      font-size: .76rem;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+    }
+
+    .divider-heart {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      color: #ff91b1;
+      font-size: 1.4rem;
+      filter: drop-shadow(0 0 14px rgb(255 105 152 / 75%));
+      animation: heartbeat 1.7s ease-in-out infinite;
+    }
+
+    .glass-card {
+      position: relative;
+      width: min(100%, 660px);
+      padding: clamp(26px, 7vw, 58px);
+      overflow: hidden;
+      border: 1px solid rgb(255 221 226 / 17%);
+      border-radius: 26px;
+      background: linear-gradient(140deg, rgb(255 239 242 / 9%), rgb(111 31 57 / 15%) 60%, rgb(255 238 221 / 4%));
+      box-shadow: 0 24px 90px rgb(0 0 0 / 28%), inset 0 1px rgb(255 255 255 / 8%);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .glass-card::before {
+      position: absolute;
+      top: -90px;
+      right: -80px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgb(245 136 167 / 10%);
+      content: "";
+      filter: blur(45px);
+      pointer-events: none;
+    }
+
+    .glass-card .message {
+      position: relative;
+    }
+
+    .glass-card .message + .message {
+      margin-top: 18px;
+    }
+
+    .story-section .glow-button {
+      margin-top: 10px;
+    }
+
+    .modal {
+      position: fixed;
+      z-index: 5;
+      inset: 0;
+      display: grid;
+      visibility: hidden;
+      place-items: center;
+      padding: max(20px, env(safe-area-inset-top)) 18px max(20px, env(safe-area-inset-bottom));
+      background: rgb(8 4 8 / 77%);
+      opacity: 0;
+      transition: opacity 350ms ease, visibility 350ms ease;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .modal.open {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal-card {
+      width: min(100%, 600px);
+      max-height: 100%;
+      overflow: auto;
+      padding: clamp(27px, 7vw, 56px);
+      border: 1px solid rgb(255 220 228 / 28%);
+      border-radius: 28px;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgb(160 52 83 / 35%), transparent 62%),
+        linear-gradient(150deg, #2d101d, #160b12 75%);
+      box-shadow: 0 30px 110px rgb(0 0 0 / 55%), 0 0 50px rgb(176 58 92 / 16%);
+      text-align: center;
+      transform: translateY(20px) scale(.98);
+      transition: transform 400ms cubic-bezier(.2, .8, .2, 1);
+      overscroll-behavior: contain;
+    }
+
+    .modal.open .modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-heart {
+      display: block;
+      margin-bottom: 16px;
+      color: #ff9eb9;
+      font-size: 2rem;
+      filter: drop-shadow(0 0 15px rgb(255 112 152 / 80%));
+      animation: heartbeat 1.7s ease-in-out infinite;
+    }
+
+    .modal-card .message {
+      margin-inline: auto;
+      font-size: clamp(1.15rem, 4vw, 1.65rem);
+      line-height: 1.8;
+    }
+
+    .modal-card .message + .message {
+      margin-top: 18px;
+    }
+
+    .close-button {
+      min-height: 48px;
+      margin-top: 28px;
+      padding: 10px 23px;
+      border: 1px solid rgb(255 211 219 / 33%);
+      border-radius: 999px;
+      color: #ffe9e7;
+      background: rgb(255 255 255 / 7%);
+      cursor: pointer;
+      transition: background 180ms ease;
+    }
+
+    .close-button:hover {
+      background: rgb(255 255 255 / 13%);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @keyframes ambient {
+      to { transform: rotate(1turn); }
+    }
+
+    @keyframes twinkle {
+      from { opacity: .18; transform: scale(.75); }
+      to { opacity: .82; transform: scale(1.3); }
+    }
+
+    @keyframes drift {
+      0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0deg); }
+      12% { opacity: .55; }
+      84% { opacity: .38; }
+      100% { opacity: 0; transform: translate3d(var(--sway, 35px), -110vh, 0) rotate(35deg); }
+    }
+
+    @keyframes heartGlow {
+      0%, 100% { text-shadow: 0 0 20px rgb(255 140 172 / 28%), 0 0 50px rgb(232 77 125 / 18%); }
+      50% { text-shadow: 0 0 30px rgb(255 140 172 / 56%), 0 0 80px rgb(232 77 125 / 34%); }
+    }
+
+    @keyframes heartbeat {
+      0%, 45%, 100% { transform: scale(1); }
+      12% { transform: scale(1.15); }
+      24% { transform: scale(.99); }
+      34% { transform: scale(1.09); }
+    }
+
+    @keyframes sheen {
+      0%, 72%, 100% { left: -45%; }
+      88% { left: 125%; }
+    }
+
+    @keyframes storyIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes lineReveal {
+      from {
+        opacity: 0;
+        filter: blur(5px);
+        transform: translate3d(0, 22px, 0) scale(.98);
+      }
+      to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .intro-content { gap: 15px; }
+      .story { width: min(100% - 28px, 820px); }
+      .story-section { min-height: 78vh; min-height: 78svh; padding-inline: 2px; }
+      .story-section.final { min-height: 84vh; min-height: 84svh; }
+      .message { line-height: 1.75; }
+      .glass-card { border-radius: 22px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"></div>
+  <div class="float-layer" aria-hidden="true"></div>
+
+  <main class="experience">
+    <section class="intro-screen" id="intro" aria-label="A little surprise">
+      <div class="intro-content">
+        <p class="intro-line primary visible" data-intro-line>ওই বউ... ❤️</p>
+        <p class="intro-line" data-intro-line>মারিয়া... 👀❤️</p>
+        <p class="intro-line" data-intro-line>একটু এদিকে আসো তো... 😌</p>
+        <p class="intro-line note" data-intro-line>তোমাকে একটা কথা বলার ছিল... ❤️</p>
+        <div class="intro-action">
+          <button class="glow-button" id="begin" type="button">একটু দেখো... 💌</button>
+        </div>
+      </div>
+    </section>
+
+    <article class="story" id="story" aria-label="A love note for Mariya">
+      <section class="story-section compact" aria-live="polite">
+        <p class="kicker">একটু মনে করো</p>
+        <div class="divider-heart" aria-hidden="true">♥</div>
+        <div id="curiosity"></div>
+      </section>
+
+      <section class="story-section compact" id="suspense" aria-live="polite">
+        <p class="kicker">একটা ছোট্ট সত্যি</p>
+        <div class="divider-heart" aria-hidden="true">♥</div>
+        <div id="suspense-lines"></div>
+      </section>
+
+      <section class="story-section">
+        <p class="message" data-reveal>কিন্তু একটা জিনিসের জন্য<br>আজকের দিনটাও আমার কাছে special। ❤️</p>
+        <p class="message gold" data-reveal>কারণ তোমাকে <strong>I LOVE YOU</strong> বলার জন্য<br>আমার কোনো special day দরকার নেই।</p>
+        <p class="message soft" data-reveal>তোমাকে ভালোবাসি বলার জন্য কোনো occasion লাগে না।</p>
+        <p class="message soft" data-reveal>তোমাকে miss করার জন্য কোনো reason লাগে না।</p>
+        <p class="message soft" data-reveal>আর তোমাকে মনে করার জন্য<br>কোনো special date-এর অপেক্ষা করতে হয় না।</p>
+      </section>
+
+      <section class="story-section">
+        <p class="message" data-reveal>আমি শুধু মাঝে মাঝে<br>ছোট ছোট অযুহাত খুঁজি...</p>
+        <p class="message" data-reveal>তোমাকে আবার মনে করিয়ে দেওয়ার জন্য<br>তুমি আমার কাছে কতটা special। ❤️</p>
+        <p class="message soft" data-reveal>কারণ কিছু কথা<br>বারবার বললেও পুরোনো হয় না।</p>
+        <div class="divider-heart" aria-hidden="true">♥</div>
+        <p class="message big-love" data-reveal>I LOVE YOU,<br>MARIYA. ❤️</p>
+        <p class="message soft" data-reveal>আমার বউ।<br>আমার মানুষ।<br>আমার সবচেয়ে আপনজন। ❤️</p>
+      </section>
+
+      <section class="story-section">
+        <p class="message english" data-reveal>Every ordinary day becomes special<br>when I have you in my life.</p>
+        <p class="message soft" data-reveal>তোমার সাথে কাটানো প্রতিটা সাধারণ দিনও<br>আমার কাছে অসাধারণ।</p>
+      </section>
+
+      <section class="story-section final">
+        <p class="message soft" data-reveal>তাই মনে রেখো...</p>
+        <p class="message reveal-line" data-reveal>I DON'T NEED A SPECIAL DAY<br>TO LOVE YOU. ❤️</p>
+        <p class="message" data-reveal>তোমাকে ভালোবাসি বলার জন্য<br>আমি শুধু একটা অযুহাত খুঁজি।</p>
+        <div class="divider-heart" aria-hidden="true">♥</div>
+        <p class="message big-love" data-reveal>Happy 6th October,<br>My Love. ❤️</p>
+        <button class="glow-button" id="open-letter" type="button">শেষে একটা কথা... ❤️</button>
+      </section>
+    </article>
+  </main>
+
+  <div class="modal" id="letter-modal" role="dialog" aria-modal="true" aria-labelledby="letter-title" aria-hidden="true">
+    <div class="modal-card">
+      <span class="modal-heart" aria-hidden="true">♥</span>
+      <h1 class="sr-only" id="letter-title">A letter for Mariya</h1>
+      <p class="message">I wish, তোমার next birthday-টা যেন আর তোমার বাবার বাড়িতে না,<br>আমার ঘরে আমার পাশে থেকে celebrate করতে পারি। ❤️</p>
+      <p class="message">ততদিনে যেন আমাদের ছোট্ট সংসারটা শুরু হয়ে যায়—তুমি থাকবে আমার ঘরে, আমার পাশে, আর তোমার জন্মদিনটা আমি আমার বউকে পাশে নিয়েই celebrate করব। 🥺❤️</p>
+      <button class="close-button" id="close-letter" type="button">Close ❤️</button>
+    </div>
+  </div>
+  <button class="next-button" id="next-line" type="button" aria-label="পরের লাইন দেখাও" title="পরের লাইন">↓</button>
+
+  <script>
+    (() => {
+      const intro = document.querySelector("#intro");
+      const introLines = [...document.querySelectorAll("[data-intro-line]")];
+      const introAction = document.querySelector(".intro-action");
+      const beginButton = document.querySelector("#begin");
+      const story = document.querySelector("#story");
+      const nextButton = document.querySelector("#next-line");
+      const storySections = [...document.querySelectorAll("#story > .story-section")];
+      const curiosityBox = document.querySelector("#curiosity");
+      const suspenseBox = document.querySelector("#suspense-lines");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const curiosityLines = [
+        "Today is 6th October ❤️",
+        "আজকে কী জানো? 👀",
+        "মনে করার চেষ্টা করো তো... 😌",
+        "আজকের দিনটা যে একটু special মনে হচ্ছে না? ❤️",
+        "নাকি আমি একাই বেশি excited? 🤭",
+        "আচ্ছা... আরেকটু ভাবো। 👀",
+        "তোমার কি সত্যিই মনে পড়ছে না? 😌"
+      ];
+      const suspenseLines = [
+        "আচ্ছা... এবার সত্যিটা বলি? ❤️",
+        "আজকে আসলে...",
+        "তেমন কোনো special day না। 😌",
+        "হ্যাঁ, সত্যিই না।",
+        "আজ ৬ অক্টোবর।<br>সাধারণ একটা দিন।"
+      ];
+      let phase = "intro";
+      let introIndex = 0;
+      let lineIndex = 0;
+      let narrativeLines = [...story.querySelectorAll("[data-reveal]")];
+
+      function addRevealedMessage(container, text, className = "message") {
+        const paragraph = document.createElement("p");
+        paragraph.className = `${className} revealed-message`;
+        paragraph.innerHTML = text;
+        container.append(paragraph);
+        requestAnimationFrame(() => requestAnimationFrame(() => paragraph.classList.add("shown")));
+        paragraph.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "center" });
+      }
+
+      function showNarrativeLine() {
+        const element = narrativeLines[lineIndex];
+        element.closest(".story-section").classList.add("active");
+        const card = element.closest(".glass-card");
+        if (card) card.classList.add("revealed");
+        element.classList.add("shown");
+        element.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "center" });
+        if (lineIndex === narrativeLines.length - 1) finishNarrative();
+      }
+
+      function finishNarrative() {
+        phase = "complete";
+        nextButton.hidden = true;
+        const openButton = document.querySelector("#open-letter");
+        openButton.classList.add("ready");
+        openButton.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "center" });
+      }
+
+      function revealNext() {
+        if (phase === "intro") {
+          introIndex += 1;
+          if (introIndex < introLines.length) {
+            introLines[introIndex].classList.add("visible");
+            if (introIndex === introLines.length - 1) {
+              nextButton.hidden = true;
+              introAction.classList.add("visible");
+            }
+          } else {
+            nextButton.hidden = true;
+            introAction.classList.add("visible");
+          }
+          return;
+        }
+
+        if (phase === "curiosity") {
+          lineIndex += 1;
+          if (lineIndex < curiosityLines.length) {
+            addRevealedMessage(curiosityBox, curiosityLines[lineIndex]);
+          } else {
+            phase = "suspense";
+            lineIndex = 0;
+            storySections[1].classList.add("active");
+            addRevealedMessage(suspenseBox, suspenseLines[0], "message gold");
+          }
+          return;
+        }
+
+        if (phase === "suspense") {
+          lineIndex += 1;
+          if (lineIndex < suspenseLines.length) {
+            addRevealedMessage(suspenseBox, suspenseLines[lineIndex]);
+          } else {
+            phase = "narrative";
+            lineIndex = 0;
+            showNarrativeLine();
+          }
+          return;
+        }
+
+        if (phase === "narrative") {
+          lineIndex += 1;
+          if (lineIndex < narrativeLines.length) {
+            showNarrativeLine();
+          }
+        }
+      }
+
+      function beginSurprise() {
+        beginButton.disabled = true;
+        intro.classList.add("is-leaving");
+        window.setTimeout(() => {
+          intro.hidden = true;
+          story.classList.add("visible");
+          storySections[0].classList.add("active");
+          phase = "curiosity";
+          lineIndex = 0;
+          addRevealedMessage(curiosityBox, curiosityLines[0], "message gold");
+          nextButton.hidden = false;
+        }, reducedMotion ? 0 : 550);
+      }
+
+      function createDecorations() {
+        const sky = document.querySelector(".sky");
+        for (let index = 0; index < 52; index += 1) {
+          const star = document.createElement("i");
+          star.style.left = `${Math.random() * 100}%`;
+          star.style.top = `${Math.random() * 100}%`;
+          star.style.setProperty("--duration", `${2 + Math.random() * 4}s`);
+          star.style.animationDelay = `${Math.random() * -5}s`;
+          sky.append(star);
+        }
+
+        const floatLayer = document.querySelector(".float-layer");
+        const floatHeart = () => {
+          if (document.hidden) return;
+          const heart = document.createElement("span");
+          heart.className = "float-heart";
+          heart.textContent = Math.random() > .35 ? "♡" : "♥";
+          heart.style.left = `${Math.random() * 100}%`;
+          heart.style.setProperty("--size", `${12 + Math.random() * 15}px`);
+          heart.style.setProperty("--duration", `${10 + Math.random() * 8}s`);
+          heart.style.setProperty("--sway", `${Math.round(Math.random() * 110 - 55)}px`);
+          floatLayer.append(heart);
+          heart.addEventListener("animationend", () => heart.remove(), { once: true });
+        };
+        for (let index = 0; index < 8; index += 1) {
+          window.setTimeout(floatHeart, index * 700);
+        }
+        window.setInterval(floatHeart, 1700);
+      }
+
+      nextButton.addEventListener("click", revealNext);
+      beginButton.addEventListener("click", beginSurprise);
+      createDecorations();
+
+      const modal = document.querySelector("#letter-modal");
+      const openButton = document.querySelector("#open-letter");
+      const closeButton = document.querySelector("#close-letter");
+      let previousFocus;
+
+      function openLetter() {
+        previousFocus = document.activeElement;
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        closeButton.focus();
+      }
+
+      function closeLetter() {
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        if (previousFocus) previousFocus.focus();
+      }
+
+      openButton.addEventListener("click", openLetter);
+      closeButton.addEventListener("click", closeLetter);
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) closeLetter();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && modal.classList.contains("open")) closeLetter();
+      });
+    })();
+  </script>
+</body>
+</html>
